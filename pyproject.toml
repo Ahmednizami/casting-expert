@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "casting-expert"
-version = "0.1.1"
+version = "0.1.4"
 description = "A comprehensive Python package for type casting, conversion, and validation with advanced features"
 readme = "README.md"
 requires-python = ">=3.7"
