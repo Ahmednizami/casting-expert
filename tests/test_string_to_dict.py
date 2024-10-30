@@ -1,11 +1,6 @@
 import pytest
 from datetime import datetime
-from casting_expert.string_to_dict import (
-    TypeInference,
-    DictSerializer,
-    DictValidator,
-    ValidationError
-)
+from casting_expert import TypeInference, DictSerializer, DictValidator, ValidationError
 
 def test_type_inference():
     assert TypeInference.infer_type("123") == 123
