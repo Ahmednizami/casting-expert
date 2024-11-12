@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "casting-expert"
-version = "0.1.6"
+version = "0.1.7"
 description = "A comprehensive Python package for type casting, conversion, and validation with advanced features"
 readme = "README.md"
 requires-python = ">=3.7"
@@ -17,28 +17,59 @@ keywords = [
     "validation",
     "data conversion",
     "schema validation",
-    "type inference"
+    "type inference",
+    "cli",
+    "json"
 ]
 classifiers = [
+    # Development Status
     "Development Status :: 4 - Beta",
+    
+    # Intended Audiences
     "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "Intended Audience :: System Administrators",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Financial and Insurance Industry",
+    "Intended Audience :: Healthcare Industry",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    
+    # Topics
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Software Development :: Build Tools",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Software Development :: Pre-processors",
+    "Topic :: Text Processing :: General",
+    "Topic :: Text Processing :: Markup :: JSON",
+    "Topic :: Utilities",
+
+    # Environment
+    "Environment :: Console",
+    "Environment :: Web Environment",
+    "Environment :: Other Environment",
+
+    # License
     "License :: OSI Approved :: MIT License",
+    
+    # Operating System
     "Operating System :: OS Independent",
+    
+    # Programming Language
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
-    "Topic :: Software Development :: Libraries :: Python Modules",
-    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Programming Language :: Python :: 3.12",
+    
     "Typing :: Typed"
 ]
 
 dependencies = [
     "typing-extensions>=3.7.4",
     "python-dateutil>=2.7.0",
-    # Remove PyYAML dependency as it's optional
 ]
 
 [project.optional-dependencies]
@@ -57,6 +88,9 @@ dev = [
 [project.urls]
 "Homepage" = "https://github.com/ahmednizami/casting-expert"
 "Bug Tracker" = "https://github.com/ahmednizami/casting-expert/issues"
+
+[project.scripts]
+casting-expert = "casting_expert.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/casting_expert"]

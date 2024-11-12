@@ -5,8 +5,12 @@ This package provides robust tools for handling type conversions,
 with built-in validation and error handling.
 """
 
+from .cli import main
 from .validators import validate_input
 from .core import safe_cast, cast_to_type
+from .casters.serializers import DictSerializer
+from .casters.type_inference import TypeInference
+from .casters.validators import DictValidator, ValidationError
 from .casters.parsers  import (
     ParsingError,
     parse_string_to_dict,
@@ -15,12 +19,10 @@ from .casters.parsers  import (
     parse_key_value_pairs,
     parse_yaml_like
 )
-from .casters.type_inference import TypeInference
-from .casters.serializers import DictSerializer
-from .casters.validators import DictValidator, ValidationError
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 __all__ = [
+            'main',
             'safe_cast',
             'cast_to_type',
             'validate_input',
@@ -34,4 +36,4 @@ __all__ = [
             'DictSerializer',
             'DictValidator',
             'ValidationError'
-            ]
+        ]

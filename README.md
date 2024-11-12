@@ -1,128 +1,159 @@
-# Casting Expert
+# 🎯 Casting Expert
 
-A comprehensive Python package for type casting, string-to-dictionary conversion, and data validation with advanced features like type inference, serialization, and schema validation.
+A comprehensive Python package for type casting, conversion, and validation with built-in CLI support - perfect for developers, data scientists, and system administrators.
 
 ## 🌟 Features
 
-- **String to Dictionary Conversion**
-  - Multiple format support (JSON, Query String, Key-Value, YAML-like)
-  - Auto-format detection
-  - Nested structure support
+### 🔄 Core Features
+- Advanced type casting with fallback options
+- Comprehensive input validation
+- Type inference for automatic conversion
+- Multiple format support (JSON, YAML, Query String)
+- Nested dictionary handling
+- Error handling and validation
 
-- **Type Inference**
-  - Automatic type detection and conversion
-  - Support for common data types (int, float, bool, datetime)
-  - List parsing (comma-separated values)
-  - Nested type inference
+### 🛠️ CLI Features
+- Multiple input methods (string, file, stdin)
+- Multiple output formats
+- Pretty printing options
+- File input/output support
+- Quiet mode operation
 
-- **Data Serialization**
-  - Convert dictionaries to various string formats
-  - Pretty printing options
-  - Customizable delimiters and formatting
-
-- **Advanced Validation**
-  - Nested schema validation
-  - Custom error messages
-  - Type checking
-  - Pattern matching
-  - Range validation
-  - Length constraints
-  - Custom validators
-  - Field transformations
-  - Conditional validation
+### 🎯 Target Audiences
+- 👨‍💻 Software Developers
+- 📊 Data Scientists
+- 🔧 System Administrators
+- 👥 IT Professionals
 
 ## 📦 Installation
 
+### Basic Installation
 ```bash
 pip install casting-expert
 ```
 
-## 🚀 Quick Start
+### 🚀 Optional Features
 
-### Basic Usage
+Choose the installation that best suits your needs:
 
-```python
-from casting_expert import parse_string_to_dict
+```bash
+# 📄 YAML Support (YAML parsing and output)
+pip install "casting-expert[yaml]"
 
-# Auto-detect format and convert
-data = parse_string_to_dict('{"name": "John", "age": 30}')
+# 📊 Data Science Tools (pandas, numpy integration)
+pip install "casting-expert[data]"
+
+# 🌐 Web Development (requests, aiohttp for API integration)
+pip install "casting-expert[web]"
+
+# 🔧 Development Tools (testing, linting, type checking)
+pip install "casting-expert[dev]"
+
+# ⭐ All Features (complete installation)
+pip install "casting-expert[full]"
 ```
 
-### Type Inference
+## 🔧 Module Usage
+
+### 1. 🎯 Basic Type Casting
+
+```python
+from casting_expert import safe_cast, cast_to_type
+
+# Safe casting with None on failure
+result1 = safe_cast("123", int)  # Returns: 123
+result2 = safe_cast("invalid", int)  # Returns: None
+
+# Casting with default values
+result3 = cast_to_type("123", int, default=0)  # Returns: 123
+result4 = cast_to_type("invalid", int, default=0)  # Returns: 0
+
+# Type casting with validation
+from casting_expert import validate_input
+
+is_valid = validate_input("123", int)  # Returns: True
+can_cast = validate_input("abc", int)  # Returns: False
+```
+
+### 2. 📝 String to Dictionary Conversion
+
+```python
+from casting_expert import parse_string_to_dict, ParsingError
+
+# Simple JSON parsing
+json_str = '{"name": "John", "age": 30}'
+try:
+    data = parse_string_to_dict(json_str)
+    print(data)  # {'name': 'John', 'age': 30}
+except ParsingError as e:
+    print(f"Error: {e}")
+
+# Different format support
+from casting_expert import (
+    parse_json,
+    parse_yaml_like,
+    parse_query_string,
+    parse_key_value_pairs
+)
+
+# 📋 JSON format
+json_data = parse_json('{"name": "John"}')
+
+# 📄 YAML-like format
+yaml_data = parse_yaml_like("""
+name: John
+age: 30
+nested:
+  key: value
+""")
+
+# 🔍 Query string format
+query_data = parse_query_string("name=John&age=30&tags=python,coding")
+
+# 📑 Key-value pairs
+kv_data = parse_key_value_pairs("""
+name: John
+age: 30
+""")
+```
+
+### 3. 🔄 Type Inference
 
 ```python
 from casting_expert import TypeInference
 
-# Infer types for single values
-value1 = TypeInference.infer_type("123")         # Returns int(123)
-value2 = TypeInference.infer_type("true")        # Returns bool(True)
-value3 = TypeInference.infer_type("2024-01-01")  # Returns datetime object
-value4 = TypeInference.infer_type("1.23")        # Returns float(1.23)
-value5 = TypeInference.infer_type("a,b,c")       # Returns ["a", "b", "c"]
-
-# Infer types for entire dictionary
-data = {
+# Automatic type detection
+raw_data = {
     "id": "123",
     "active": "true",
     "score": "98.6",
-    "tags": "python,coding,dev"
+    "tags": "python,coding",
+    "date": "2024-03-12"
 }
 
-typed_data = TypeInference.infer_types_in_dict(data)
+typed_data = TypeInference.infer_types_in_dict(raw_data)
 # Result:
 # {
-#     "id": 123,
-#     "active": True,
-#     "score": 98.6,
-#     "tags": ["python", "coding", "dev"]
-# }
-```
-
-### Serialization
-
-```python
-from casting_expert import DictSerializer
-
-data = {
-    "name": "John",
-    "age": 30,
-    "scores": [95, 87, 91]
-}
-
-# Convert to different formats
-json_str = DictSerializer.to_json(data, pretty=True)
-# {
-#     "name": "John",
-#     "age": 30,
-#     "scores": [95, 87, 91]
+#     "id": 123,                          # Integer
+#     "active": True,                     # Boolean
+#     "score": 98.6,                      # Float
+#     "tags": ["python", "coding"],       # List
+#     "date": datetime(2024, 3, 12)       # DateTime
 # }
 
-query_str = DictSerializer.to_query_string(data, prefix='?')
-# ?name=John&age=30&scores=[95,87,91]
-
-kv_str = DictSerializer.to_key_value(data, delimiter=': ')
-# name: John
-# age: 30
-# scores: [95, 87, 91]
-
-yaml_str = DictSerializer.to_yaml_like(data)
-# name: John
-# age: 30
-# scores: 
-#   - 95
-#   - 87
-#   - 91
+# Single value inference
+number = TypeInference.infer_type("123")         # Returns: 123
+boolean = TypeInference.infer_type("true")       # Returns: True
+date = TypeInference.infer_type("2024-03-12")    # Returns: datetime object
 ```
 
-### Validation
-
-#### Basic Validation
+### 4. ✅ Dictionary Validation
 
 ```python
-from casting_expert import DictValidator
+from casting_expert import DictValidator, ValidationError
 
 # Create validation schema
-schema = {
+user_schema = {
     "name": DictValidator.create_field(
         str,
         required=True,
@@ -147,191 +178,494 @@ schema = {
         required=True,
         pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$',
         error_messages={"pattern": "Invalid email format"}
+    ).add_validator(
+        lambda x: not x.endswith('.temp'),
+        "Temporary email domains are not allowed"
     )
 }
 
 # Validate data
-data = {
-    "name": "John Doe",
-    "age": 30,
-    "email": "john@example.com"
-}
-
-result = DictValidator.validate(data, schema)
-if result.is_valid:
-    print("Validation passed!")
-else:
-    for issue in result.issues:
-        print(f"{issue.severity}: {issue.field} - {issue.message}")
+try:
+    result = DictValidator.validate(data, user_schema)
+    if result.is_valid:
+        print("✅ Validation passed!")
+    else:
+        for issue in result.issues:
+            print(f"⚠️ {issue.field}: {issue.message}")
+except ValidationError as e:
+    print(f"❌ Validation failed: {e}")
 ```
 
-#### Nested Validation
+### 5. 💾 Dictionary Serialization
 
 ```python
-# Create nested schema
-address_schema = {
-    "street": DictValidator.create_field(
-        str,
-        required=True,
-        min_length=5,
-        error_messages={"min_length": "Street name is too short"}
-    ),
-    "city": DictValidator.create_field(
-        str,
-        required=True,
-        choices=["New York", "Los Angeles", "Chicago"]
-    ),
-    "zip_code": DictValidator.create_field(
-        str,
-        pattern=r'^\d{5}(-\d{4})?$',
-        error_messages={"pattern": "Invalid ZIP code format"}
-    )
-}
+from casting_expert import DictSerializer
 
-# Main schema with nested address
-schema = {
-    "name": DictValidator.create_field(str, required=True),
-    "address": DictValidator.create_field(
-        dict,
-        required=True,
-        schema=address_schema
-    )
-}
-
-# Validate nested data
 data = {
-    "name": "John Doe",
-    "address": {
-        "street": "123 Main St",
+    "name": "John",
+    "age": 30,
+    "scores": [95, 87, 91],
+    "details": {
         "city": "New York",
-        "zip_code": "12345"
+        "role": "developer"
     }
 }
 
-result = DictValidator.validate(data, schema)
+# JSON output (pretty-printed)
+json_str = DictSerializer.to_json(data, pretty=True)
+
+# Query string format
+query_str = DictSerializer.to_query_string(data, prefix='?')
+
+# YAML format
+yaml_str = DictSerializer.to_yaml_like(data)
+
+# Key-value format
+kv_str = DictSerializer.to_key_value(data, delimiter=': ')
 ```
 
-#### Custom Validators and Transformations
 
-```python
-# Custom validator
-def validate_domain(email: str) -> bool:
-    return not email.endswith(('.temp', '.test'))
 
-email_field = DictValidator.create_field(
-    str,
-    pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$'
-).add_validator(
-    validate_domain,
-    "Temporary email domains are not allowed"
-)
+## 🖥️ CLI Usage
 
-# Transform before validation
-username_field = DictValidator.create_field(
-    str
-).add_transform(
-    lambda x: x.lower().strip()
-)
+### Basic Commands
 
-# Combined schema
-schema = {
-    "email": email_field,
-    "username": username_field
-}
-```
-
-## 🧪 Testing
-
+1. **📝 Parse String Input**
 ```bash
-# Install development dependencies
-pip install -e ".[dev]"
+# Simple parsing
+casting-expert -s '{"name": "John", "age": 30}'
 
-# Run tests
-pytest
+# Pretty printing
+casting-expert -s '{"name": "John"}' --pretty --indent 4
 ```
 
-## 📝 Common Use Cases
+2. **📂 File Operations**
+```bash
+# Read from file
+casting-expert -f input.json
 
-### 1. Form Data Processing
+# Write to file
+casting-expert -f input.json -o output.json
 
-```python
-from casting_expert import parse_string_to_dict, TypeInference, DictValidator
-
-# Process form data
-form_data = "name=John+Doe&age=30&email=john@example.com"
-data = parse_string_to_dict(form_data, format='query')
-typed_data = TypeInference.infer_types_in_dict(data)
-
-# Validate
-schema = {
-    "name": DictValidator.create_field(str, required=True),
-    "age": DictValidator.create_field(int, min_value=0),
-    "email": DictValidator.create_field(str, pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$')
-}
-
-result = DictValidator.validate(typed_data, schema)
+# Convert JSON to YAML
+casting-expert -f input.json --format yaml -o output.yaml
 ```
 
-### 2. Configuration File Processing
+3. **📊 Format Options**
+```bash
+# Output as YAML
+casting-expert -s '{"name": "John"}' --format yaml
 
-```python
-# Process YAML-like config
-config_str = """
-database:
-  host: localhost
-  port: 5432
-  username: admin
-settings:
-  debug: true
-  max_connections: 100
-"""
+# Output as Python dict
+casting-expert -s '{"name": "John"}' --format python
 
-config = parse_string_to_dict(config_str, format='yaml_like')
-typed_config = TypeInference.infer_types_in_dict(config)
+# Pretty JSON
+casting-expert -s '{"name": "John"}' --pretty
 ```
 
-### 3. API Response Validation
+4. **📥 Standard Input**
+```bash
+# Pipe input
+echo '{"name": "John"}' | casting-expert -i
 
+# Redirect input
+casting-expert -i < input.json
+```
+
+### CLI Options Reference
+
+```
+📋 Required Options (choose one):
+  -s, --string STRING   Input string to parse
+  -f, --file FILE      Input file path
+  -i, --stdin          Read from stdin
+
+📝 Output Options:
+  -o, --output OUTPUT  Output file path
+  --format FORMAT      Output format (json|yaml|python)
+  --indent INDENT     Indentation spaces (default: 2)
+  --pretty           Enable pretty printing
+  -q, --quiet        Suppress non-error output
+```
+
+## 📁 Package Structure
+
+```
+src/
+├── casting_expert/          # Main package directory
+│   ├── __init__.py         # Package initialization
+│   ├── cli.py              # CLI implementation
+│   ├── core.py             # Core casting functions
+│   ├── validators.py       # Input validation
+│   └── casters/            # Specialized casters
+│       ├── __init__.py
+│       ├── parsers.py      # String parsing
+│       ├── serializers.py  # Data serialization
+│       ├── type_inference.py # Type detection
+│       └── validators.py   # Data validation
+```
+
+# 📚 Advanced Use Cases & Examples
+
+## 🔄 Data Processing
+
+### 1. API Response Processing
 ```python
-# Define API response schema
-response_schema = {
-    "status": DictValidator.create_field(
-        str,
-        choices=["success", "error"]
-    ),
-    "data": DictValidator.create_field(
+from casting_expert import parse_string_to_dict, TypeInference
+
+def process_api_response():
+    # Sample API response
+    response = '''
+    {
+        "status": "success",
+        "code": "200",
+        "data": {
+            "user_id": "12345",
+            "is_active": "true",
+            "last_login": "2024-03-12T10:30:00Z",
+            "metrics": {
+                "visits": "1000",
+                "conversion_rate": "0.15"
+            }
+        }
+    }
+    '''
+    
+    # Parse and infer types
+    data = parse_string_to_dict(response)
+    typed_data = TypeInference.infer_types_in_dict(data)
+    
+    # Access strongly-typed data
+    user_id = typed_data['data']['user_id']  # int: 12345
+    is_active = typed_data['data']['is_active']  # bool: True
+    conversion = typed_data['data']['metrics']['conversion_rate']  # float: 0.15
+
+### 2. Configuration Management
+```python
+from casting_expert import parse_yaml_like, DictValidator
+
+# Define configuration schema
+config_schema = {
+    "database": DictValidator.create_field(
         dict,
-        nullable=True,
         schema={
-            "id": DictValidator.create_field(int, required=True),
-            "name": DictValidator.create_field(str, required=True)
+            "host": DictValidator.create_field(str, required=True),
+            "port": DictValidator.create_field(int, min_value=1, max_value=65535),
+            "credentials": DictValidator.create_field(
+                dict,
+                schema={
+                    "username": DictValidator.create_field(str, required=True),
+                    "password": DictValidator.create_field(str, required=True)
+                }
+            )
         }
     ),
-    "message": DictValidator.create_field(str, required=True)
+    "cache": DictValidator.create_field(
+        dict,
+        schema={
+            "enabled": DictValidator.create_field(bool, required=True),
+            "ttl": DictValidator.create_field(int, min_value=0)
+        }
+    )
 }
 
-# Validate API response
-response_data = {
-    "status": "success",
-    "data": {
-        "id": 123,
-        "name": "John"
-    },
-    "message": "Data retrieved successfully"
-}
+# Load and validate configuration
+config_str = '''
+database:
+    host: localhost
+    port: 5432
+    credentials:
+        username: admin
+        password: secret123
+cache:
+    enabled: true
+    ttl: 3600
+'''
 
-result = DictValidator.validate(response_data, response_schema)
+config = parse_yaml_like(config_str)
+validation_result = DictValidator.validate(config, config_schema)
 ```
 
-## 📄 License
+### 3. Data Analysis Pipeline
+```python
+import pandas as pd
+from casting_expert import parse_string_to_dict, TypeInference
 
-MIT License - feel free to use this package in your projects.
+def analyze_data():
+    # Sample data
+    data_str = '''
+    {
+        "sales_data": [
+            {"date": "2024-03-01", "revenue": "1000.50", "units": "50"},
+            {"date": "2024-03-02", "revenue": "1500.75", "units": "75"},
+            {"date": "2024-03-03", "revenue": "1250.25", "units": "60"}
+        ],
+        "metadata": {
+            "currency": "USD",
+            "store_id": "123"
+        }
+    }
+    '''
+    
+    # Parse and process
+    data = parse_string_to_dict(data_str)
+    typed_data = TypeInference.infer_types_in_dict(data)
+    
+    # Convert to pandas DataFrame
+    df = pd.DataFrame(typed_data['sales_data'])
+    
+    # Analysis
+    total_revenue = df['revenue'].sum()
+    avg_units = df['units'].mean()
+    return df, total_revenue, avg_units
+
+### 4. Log Processing
+```python
+from casting_expert import parse_string_to_dict, DictSerializer
+
+def process_logs():
+    # Sample log entry
+    log_entry = '''
+    {
+        "timestamp": "2024-03-12T10:30:00Z",
+        "level": "ERROR",
+        "service": "authentication",
+        "message": "Login failed",
+        "metadata": {
+            "user_id": "12345",
+            "ip": "192.168.1.1",
+            "attempts": "3"
+        }
+    }
+    '''
+    
+    # Parse and enhance
+    log = parse_string_to_dict(log_entry)
+    typed_log = TypeInference.infer_types_in_dict(log)
+    
+    # Transform for storage
+    enhanced_log = {
+        **typed_log,
+        "processed_at": datetime.now().isoformat(),
+        "severity": 5 if typed_log['level'] == 'ERROR' else 3
+    }
+    
+    # Serialize for storage
+    return DictSerializer.to_json(enhanced_log)
+```
+
+### 5. Form Data Processing
+```python
+from casting_expert import parse_query_string, DictValidator
+
+def process_form():
+    # Sample form data
+    form_data = "name=John+Doe&age=30&email=john%40example.com&subscribe=true"
+    
+    # Parse query string
+    data = parse_query_string(form_data)
+    
+    # Validate form data
+    form_schema = {
+        "name": DictValidator.create_field(str, required=True, min_length=2),
+        "age": DictValidator.create_field(int, min_value=18),
+        "email": DictValidator.create_field(
+            str,
+            pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$'
+        ),
+        "subscribe": DictValidator.create_field(bool)
+    }
+    
+    validation_result = DictValidator.validate(data, form_schema)
+    return validation_result.is_valid, data
+```
+
+### 6. Data Migration
+```python
+from casting_expert import (
+    parse_string_to_dict,
+    DictSerializer,
+    TypeInference
+)
+
+def migrate_data():
+    # Old format
+    old_data = '''
+    {
+        "user": {
+            "firstName": "John",
+            "lastName": "Doe",
+            "isActive": "1",
+            "loginCount": "42"
+        }
+    }
+    '''
+    
+    # Parse and transform
+    data = parse_string_to_dict(old_data)
+    typed_data = TypeInference.infer_types_in_dict(data)
+    
+    # New format
+    new_data = {
+        "profile": {
+            "full_name": f"{typed_data['user']['firstName']} {typed_data['user']['lastName']}",
+            "active": bool(typed_data['user']['isActive']),
+            "stats": {
+                "logins": typed_data['user']['loginCount']
+            }
+        }
+    }
+    
+    # Output in different formats
+    return {
+        "json": DictSerializer.to_json(new_data),
+        "yaml": DictSerializer.to_yaml_like(new_data),
+        "query": DictSerializer.to_query_string(new_data)
+    }
+```
+
+# 🔧 Troubleshooting Guide
+
+## Common Issues and Solutions
+
+### 1. Parsing Errors
+
+#### Issue: Invalid JSON Format
+```python
+ParsingError: Invalid dictionary format: Expecting property name enclosed in double quotes
+```
+
+**Solution**:
+- Ensure all keys are enclosed in double quotes
+- Check for missing or extra commas
+- Validate JSON syntax using a JSON validator
+
+**Example Fix**:
+```python
+# Invalid
+data = parse_string_to_dict('{name: "John"}')
+
+# Valid
+data = parse_string_to_dict('{"name": "John"}')
+```
+
+### 2. Type Inference Issues
+
+#### Issue: Unexpected Type Inference
+```python
+# Data contains number-like strings that should remain strings
+data = {"id": "001", "code": "123456"}
+```
+
+**Solution**:
+Use explicit type casting or custom validation:
+```python
+from casting_expert import DictValidator
+
+schema = {
+    "id": DictValidator.create_field(str),  # Force string type
+    "code": DictValidator.create_field(str)
+}
+```
+
+### 3. Validation Errors
+
+#### Issue: Complex Validation Requirements
+```python
+ValidationError: Invalid value for field 'email'
+```
+
+**Solution**:
+Use custom validators:
+```python
+def validate_email_domain(email: str) -> bool:
+    return email.endswith(('@company.com', '@company.org'))
+
+schema = {
+    "email": DictValidator.create_field(
+        str,
+        pattern=r'^[\w\.-]+@[\w\.-]+\.\w+$'
+    ).add_validator(
+        validate_email_domain,
+        "Email must be from company domain"
+    )
+}
+```
+
+### 4. CLI Issues
+
+#### Issue: YAML Output Not Working
+```bash
+Warning: PyYAML not installed. Defaulting to JSON format.
+```
+
+**Solution**:
+Install YAML support:
+```bash
+pip install "casting-expert[yaml]"
+```
+
+### 5. Performance Issues
+
+#### Issue: Slow Processing of Large Files
+
+**Solution**:
+- Use streaming for large files
+- Process data in chunks
+- Use appropriate format options
+
+```python
+def process_large_file(filepath: str):
+    with open(filepath, 'r') as f:
+        for line in f:
+            try:
+                data = parse_string_to_dict(line.strip())
+                # Process each line
+                yield data
+            except ParsingError:
+                continue
+```
+
+### 6. Module Import Issues
+
+#### Issue: Module Not Found
+
+**Solution**:
+- Verify installation:
+```bash
+pip show casting-expert
+```
+- Check Python path
+- Verify virtual environment activation
+
+### 7. Common Error Messages
+
+#### `ParsingError: Invalid dictionary format`
+- Check input string format
+- Verify quotes and delimiters
+- Ensure valid nesting
+
+#### `ValidationError: Required field missing`
+- Check schema requirements
+- Verify all required fields are present
+- Check field names case sensitivity
+
+#### `TypeError: Object of type X is not JSON serializable`
+- Use appropriate serialization method
+- Convert custom objects to basic types
+- Implement custom serializers if needed
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! See [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
 
-## 📬 Contact
+## 📄 License
 
-- Issue Tracker: [GitHub Issues](https://github.com/ahmednizami/casting-expert/issues)
-- Source Code: [GitHub](https://github.com/ahmednizami/casting-expert)
+MIT License - See [LICENSE](LICENSE) file for details.
+
+## 📬 Contact & Support
+
+- 📃 Documentation: [Read the Docs](https://casting-expert.readthedocs.io)
+- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/casting-expert/issues)
+- 💻 Source: [GitHub](https://github.com/yourusername/casting-expert)
+- 📧 Email: support@example.com
