@@ -665,7 +665,7 @@ MIT License - See [LICENSE](LICENSE) file for details.
 
 ## 📬 Contact & Support
 
-- 📃 Documentation: [Read the Docs](https://casting-expert.readthedocs.io)
-- 🐛 Issues: [GitHub Issues](https://github.com/yourusername/casting-expert/issues)
-- 💻 Source: [GitHub](https://github.com/yourusername/casting-expert)
-- 📧 Email: support@example.com
+- 📃 Documentation: [Read the Docs](https://github.com/ahmednizami/casting-expert/)
+- 🐛 Issues: [GitHub Issues](https://github.com/ahmednizami/casting-expert/issues)
+- 💻 Source: [GitHub](https://github.com/ahmednizami/casting-expert)
+- 📧 Email: ahmednizami2021@gmailcom
