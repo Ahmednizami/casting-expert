@@ -12,6 +12,7 @@ license = "MIT"
 authors = [
     { name = "Muhammad Ahmed Saeed", email = "ahmednizami2021@gmail.com" }
 ]
+
 keywords = [
     "type casting",
     "validation",
@@ -19,8 +20,14 @@ keywords = [
     "schema validation",
     "type inference",
     "cli",
-    "json"
+    "json",
+    "yaml",
+    "data processing",
+    "string parsing",
+    "dictionary conversion",
+    "data transformation"
 ]
+
 classifiers = [
     # Development Status
     "Development Status :: 4 - Beta",
@@ -38,17 +45,14 @@ classifiers = [
     # Topics
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Software Development :: Build Tools",
-    "Topic :: Software Development :: Libraries :: Application Frameworks",
-    "Topic :: Software Development :: Pre-processors",
-    "Topic :: Text Processing :: General",
-    "Topic :: Text Processing :: Markup :: JSON",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Text Processing",
     "Topic :: Utilities",
-
+    
     # Environment
     "Environment :: Console",
     "Environment :: Web Environment",
-    "Environment :: Other Environment",
-
+    
     # License
     "License :: OSI Approved :: MIT License",
     
@@ -87,7 +91,9 @@ dev = [
 
 [project.urls]
 "Homepage" = "https://github.com/ahmednizami/casting-expert"
+"Documentation" = "https://github.com/ahmednizami/casting-expert"
 "Bug Tracker" = "https://github.com/ahmednizami/casting-expert/issues"
+"Changelog" = "https://github.com/ahmednizami/casting-expert/blob/main/CHANGELOG.md"
 
 [project.scripts]
 casting-expert = "casting_expert.cli:main"
